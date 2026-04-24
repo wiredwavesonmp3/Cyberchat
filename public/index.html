@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CyberChat</title>
+
+<style>
+body {
+  background: black;
+  color: #00fff7;
+  font-family: monospace;
+  text-shadow: 0 0 8px #00fff7;
+}
+
+#messages {
+  height: 80vh;
+  overflow-y: scroll;
+  border: 1px solid #00fff7;
+  padding: 10px;
+}
+
+input {
+  width: 80%;
+  background: black;
+  color: #00fff7;
+  border: 1px solid #00fff7;
+}
+
+button {
+  background: #00fff7;
+  color: black;
+}
+</style>
+</head>
+
+<body>
+
+<h2>⚡ CYBERCHAT ⚡</h2>
+
+<div id="messages"></div>
+
+<input id="input" autocomplete="off"/>
+<button onclick="send()">SEND</button>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+const socket = io();
+
+function send() {
+  const input = document.getElementById("input");
+  socket.emit("chat message", input.value);
+  input.value = "";
+}
+
+socket.on("chat message", (msg) => {
+  const div = document.createElement("div");
+  div.textContent = msg;
+  document.getElementById("messages").appendChild(div);
+});
+</script>
+
+</body>
+</html>
