@@ -5,10 +5,17 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
-// 🔥 IMPORTANT: force websocket
+// ✅ DO NOT FORCE WEBSOCKET
 const io = new Server(server, {
-  cors: { origin: "*" },
-  transports: ["websocket"]
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
+// simple route (prevents "not found")
+app.get("/", (req, res) => {
+  res.send("CyberChat server is running ⚡");
 });
 
 io.on("connection", (socket) => {
@@ -16,7 +23,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat message", (msg) => {
     console.log("📩", msg);
-    io.emit("chat message", msg); // send to everyone
+    io.emit("chat message", msg); // broadcast
   });
 
   socket.on("disconnect", () => {
