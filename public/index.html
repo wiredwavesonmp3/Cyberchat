@@ -1,62 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>CyberChat</title>
+  <title>CYBERCHAT</title>
+  <style>
+    body {
+      background: black;
+      color: #00ffcc;
+      font-family: monospace;
+      text-align: center;
+    }
 
-<style>
-body {
-  background: black;
-  color: #00fff7;
-  font-family: monospace;
-  text-shadow: 0 0 8px #00fff7;
-}
+    h1 {
+      text-shadow: 0 0 10px #00ffcc;
+    }
 
-#messages {
-  height: 80vh;
-  overflow-y: scroll;
-  border: 1px solid #00fff7;
-  padding: 10px;
-}
+    #chat {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #00ffcc;
+      margin: 20px;
+      padding: 10px;
+    }
 
-input {
-  width: 80%;
-  background: black;
-  color: #00fff7;
-  border: 1px solid #00fff7;
-}
+    input {
+      background: black;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      padding: 10px;
+      width: 70%;
+    }
 
-button {
-  background: #00fff7;
-  color: black;
-}
-</style>
+    button {
+      background: #00ffcc;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-
 <body>
 
-<h2>⚡ CYBERCHAT ⚡</h2>
+<h1>⚡ CYBERCHAT ⚡</h1>
 
-<div id="messages"></div>
+<div id="chat"></div>
 
-<input id="input" autocomplete="off"/>
+<input id="msg" placeholder="Enter message..." />
 <button onclick="send()">SEND</button>
 
-<script src="/socket.io/socket.io.js"></script>
-
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-const socket = io();
+const socket = io("https://cyberchat-zzfn.onrender.com/");
 
-function send() {
-  const input = document.getElementById("input");
-  socket.emit("chat message", input.value);
-  input.value = "";
-}
+const chat = document.getElementById("chat");
 
 socket.on("chat message", (msg) => {
   const div = document.createElement("div");
   div.textContent = msg;
-  document.getElementById("messages").appendChild(div);
+  chat.appendChild(div);
 });
+
+function send() {
+  const input = document.getElementById("msg");
+  socket.emit("chat message", input.value);
+  input.value = "";
+}
 </script>
 
 </body>
